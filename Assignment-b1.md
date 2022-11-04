@@ -1,4 +1,4 @@
-Assignment-B-1
+Assignment-b1
 ================
 2022-11-04
 
@@ -13,12 +13,12 @@ library(lubridate)
 
 # Exercise 1 & 2
 
--   Exercise 1: In this exercise, you’ll be making a function and
-    fortifying it. The function need not be complicated. The function
-    need not be “serious”, but shouldn’t be nonsense.
+- Exercise 1: In this exercise, you’ll be making a function and
+  fortifying it. The function need not be complicated. The function need
+  not be “serious”, but shouldn’t be nonsense.
 
--   Exercise 2: In the same code chunk where you made your function,
-    document the function using roxygen2 tags. Be sure to include:
+- Exercise 2: In the same code chunk where you made your function,
+  document the function using roxygen2 tags. Be sure to include:
 
 1.  Title.
 2.  Function description: In 1-2 brief sentences, describe what the
@@ -56,7 +56,7 @@ count_by_time <- function(dataset, date_column, floor_unit) {
     }
   
     if(!(floor_unit %in% c("year", "month", "day"))){
-        stop("floor_unit must be one of the value in (\"year\", \"month\", \"day\").")
+        stop("floor_unit must be one of year, month, or day.")
     }
     
     format_unit <- if(floor_unit == "year") "%Y" else (if(floor_unit == "month") "%b" else "%d") 
@@ -105,6 +105,9 @@ Now show the total number of trees planted each year
 (count_by_time(vancouver_trees, "date_planted", "year"))
 ```
 
+    ## Warning: Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
+    ## ℹ Please use `all_of(var)` (or `any_of(var)`) instead of `.data[[var]]`
+
     ## # A tibble: 31 × 2
     ## # Groups:   time [31]
     ##    time  count
@@ -131,18 +134,18 @@ Show the total number of trees planted each month across all years
     ## # Groups:   time [12]
     ##    time  count
     ##    <chr> <int>
-    ##  1 Apr    6815
-    ##  2 Aug      87
-    ##  3 Dec    8502
-    ##  4 Feb   12988
-    ##  5 Jan   12138
-    ##  6 Jul     170
-    ##  7 Jun     516
-    ##  8 Mar   12299
-    ##  9 May    1549
-    ## 10 Nov   12184
-    ## 11 Oct    2688
-    ## 12 Sep     127
+    ##  1 " 1"  12138
+    ##  2 " 2"  12988
+    ##  3 " 3"  12299
+    ##  4 " 4"   6815
+    ##  5 " 5"   1549
+    ##  6 " 6"    516
+    ##  7 " 7"    170
+    ##  8 " 8"     87
+    ##  9 " 9"    127
+    ## 10 "10"   2688
+    ## 11 "11"  12184
+    ## 12 "12"   8502
 
 Show the total number of trees planted each day across all months
 
@@ -198,7 +201,7 @@ It also throws an error when floor_unit is not a value in (“day”,
 (count_by_time(vancouver_trees, "date_planted", "hour"))
 ```
 
-    ## Error in count_by_time(vancouver_trees, "date_planted", "hour"): floor_unit must be one of the value in ("year", "month", "day").
+    ## Error in count_by_time(vancouver_trees, "date_planted", "hour"): floor_unit must be one of year, month, or day.
 
 # Exercise 4
 
@@ -212,36 +215,43 @@ and they should be contained in a test_that() function (or more than
 one). They should all pass.
 
 ``` r
+count_by_year <- vancouver_trees %>%
+  drop_na(date_planted) %>%
+  mutate(date_floored = floor_date(date_planted, unit="year")) %>%
+  mutate(time = format(date_floored, "%Y")) %>%
+  group_by(time) %>%
+  count(time, name = "count")
+
+count_by_month <- vancouver_trees %>%
+  drop_na(date_planted) %>%
+  mutate(date_floored = floor_date(date_planted, unit="month")) %>%
+  mutate(time = format(date_floored, "%b")) %>%
+  group_by(time) %>%
+  count(time, name = "count")
+
+count_by_day <- vancouver_trees %>%
+  drop_na(date_planted) %>%
+  mutate(date_floored = floor_date(date_planted, unit="day")) %>%
+  mutate(time = format(date_floored, "%d")) %>%
+  group_by(time) %>%
+  count(time, name = "count")
+
 test_that("Test count_by_time function", {
-  count_by_year <- vancouver_trees %>%
-    drop_na(date_planted) %>%
-    mutate(date_floored = floor_date(date_planted, unit="year")) %>%
-    mutate(time = format(date_floored, "%Y")) %>%
-    group_by(time) %>%
-    count(time, name = "count_by_time")
-  
-  count_by_month <- vancouver_trees %>%
-    drop_na(date_planted) %>%
-    mutate(date_floored = floor_date(date_planted, unit="month")) %>%
-    mutate(time = format(date_floored, "%b")) %>%
-    group_by(time) %>%
-    count(time, name = "count_by_time")
-  
-  count_by_day <- vancouver_trees %>%
-    drop_na(date_planted) %>%
-    mutate(date_floored = floor_date(date_planted, unit="day")) %>%
-    mutate(time = format(date_floored, "%d")) %>%
-    group_by(time) %>%
-    count(time, name = "count_by_time")
-  
+  # Test if it handles "year" correctly
   expect_equal(count_by_time(vancouver_trees, "date_planted", "year"), count_by_year)
+  # Test if it handles "month" correctly
   expect_equal(count_by_time(vancouver_trees, "date_planted", "month"), count_by_month)
+  # Test if it handles "day" correctly
   expect_equal(count_by_time(vancouver_trees, "date_planted", "day"), count_by_day)
+  # Test if it throws an error when the input column is an object
   expect_error(count_by_time(vancouver_trees, date_planted, "year"), 'The selected column must be a string.')
+  # Test if it throws an error when the input column does not exist
   expect_error(count_by_time(vancouver_trees, "planted_date", "year"), 'The selected column does not exist in the given dataset.')
+  # Test if it throws an error when the input column is not a Date column
   expect_error(count_by_time(vancouver_trees, "curb", "year"), 'The selected column must be a Date.')
-  expect_error(count_by_time(vancouver_trees, "date_planted", "hour"), 'floor_unit must be one of the value in (\"year\", \"month\", \"day\").')
+  # Test if it throws an error when the time unit is not valid option
+  expect_error(count_by_time(vancouver_trees, "date_planted", "hour"), 'floor_unit must be one of year, month, or day.')
 })
 ```
 
-    ## Error: 'ansi_hyperlink_types' is not an exported object from 'namespace:cli'
+    ## Test passed 😸
