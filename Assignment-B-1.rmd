@@ -1,0 +1,150 @@
+---
+title: "Assignment-B-1"
+output: github_document
+date: "2022-11-04"
+---
+
+```{r, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(datateachr)
+library(testthat)
+library(dplyr)
+library(lubridate)
+```
+
+# Exercise 1 & 2
+
+- Exercise 1: In this exercise, you’ll be making a function and fortifying it. The function need not be complicated. The function need not be “serious”, but shouldn’t be nonsense.
+
+- Exercise 2: In the same code chunk where you made your function, document the function using roxygen2 tags. Be sure to include:
+1. Title.
+2. Function description: In 1-2 brief sentences, describe what the function does.
+3. Document each argument with the @param tag, making sure to justify why you named the parameter as you did.
+4. (Justification for naming is not often needed, but we want to hear your reasoning.)
+5. What the function returns, using the @return tag.
+
+```{r, message=FALSE}
+#' @title count_by_time function
+#' 
+#' @details Given a Date column, count the occurrence of a date unit specified by floor_unit. This could be useful when finding the pattern between values and specified time frames.
+#' 
+#' @param dataset, the dataset to be analyzed
+#' 
+#' @param date_column, name of the Date column on which to be applied the operation
+#' 
+#' @param floor_unit, the date unit to be counted
+#' 
+#' @return a N X 2 dataframe with column "time" and "count", which represents the list of date unit values and the number of their occurrence, respectively.  
+#' 
+count_by_time <- function(dataset, date_column, floor_unit) {
+    if (!is.character(date_column)) {
+        stop("The selected column must be a string.")
+    }
+  
+    if(!(date_column %in% names(dataset))){
+        stop("The selected column does not exist in the given dataset.")
+    }
+  
+    if(!(inherits(dataset[[date_column]], 'Date'))){
+        stop("The selected column must be a Date.")
+    }
+  
+    if(!(floor_unit %in% c("year", "month", "day"))){
+        stop("floor_unit must be one of the value in (\"year\", \"month\", \"day\").")
+    }
+    
+    format_unit <- if(floor_unit == "year") "%Y" else (if(floor_unit == "month") "%b" else "%d") 
+    return (dataset %>%
+        drop_na(.data[[date_column]]) %>%
+        mutate(date_floored = floor_date(.data[[date_column]], unit=floor_unit)) %>%
+        mutate(time = format(date_floored, format_unit)) %>%
+        group_by(time) %>%
+        count(time, name = "count"))
+}
+```
+
+# Exercise 3
+Demonstrate the usage of your function with a few examples. Use one or more new code chunks, describing what you’re doing.
+
+Note: If you want to deliberately show an error, you can use error = TRUE in your code chunk option.
+
+Select Vancouver_trees as the example dataset.
+```{r, message = FALSE}
+head(vancouver_trees)
+```
+
+Now show the total number of trees planted each year
+```{r, message = FALSE}
+(count_by_time(vancouver_trees, "date_planted", "year"))
+```
+
+Show the total number of trees planted each month across all years
+```{r, message = FALSE}
+(count_by_time(vancouver_trees, "date_planted", "month"))
+```
+
+Show the total number of trees planted each day across all months
+```{r, message = FALSE}
+(count_by_time(vancouver_trees, "date_planted", "day"))
+```
+
+The function throws an error when date_column is not a valid string.
+```{r, error = TRUE}
+date_planted <- as.Date(c("2020-01-01", "2020-01-02"))
+(count_by_time(vancouver_trees, date_planted, "year"))
+```
+
+It also throws an error when date_column does not exist in the dataset.
+```{r, error = TRUE}
+(count_by_time(vancouver_trees, "planted_date", "year"))
+```
+
+It also throws an error when date_column is not a Date column.
+```{r, error = TRUE}
+(count_by_time(vancouver_trees, "curb", "year"))
+```
+
+It also throws an error when floor_unit is not a value in ("day", "year", "month").
+```{r, error = TRUE}
+(count_by_time(vancouver_trees, "date_planted", "hour"))
+```
+
+# Exercise 4
+
+Running examples is a good way of checking by-eye whether your function is working as expected. But, having a formal “yes or no” check is useful when you move on to other parts of your analysis.
+
+Write formal tests for your function. You should use at least three non-redundant uses of an expect_() function from the testthat package, and they should be contained in a test_that() function (or more than one). They should all pass.
+
+```{r, error = TRUE}
+test_that("Test count_by_time function", {
+  count_by_year <- vancouver_trees %>%
+    drop_na(date_planted) %>%
+    mutate(date_floored = floor_date(date_planted, unit="year")) %>%
+    mutate(time = format(date_floored, "%Y")) %>%
+    group_by(time) %>%
+    count(time, name = "count_by_time")
+  
+  count_by_month <- vancouver_trees %>%
+    drop_na(date_planted) %>%
+    mutate(date_floored = floor_date(date_planted, unit="month")) %>%
+    mutate(time = format(date_floored, "%b")) %>%
+    group_by(time) %>%
+    count(time, name = "count_by_time")
+  
+  count_by_day <- vancouver_trees %>%
+    drop_na(date_planted) %>%
+    mutate(date_floored = floor_date(date_planted, unit="day")) %>%
+    mutate(time = format(date_floored, "%d")) %>%
+    group_by(time) %>%
+    count(time, name = "count_by_time")
+  
+  expect_equal(count_by_time(vancouver_trees, "date_planted", "year"), count_by_year)
+  expect_equal(count_by_time(vancouver_trees, "date_planted", "month"), count_by_month)
+  expect_equal(count_by_time(vancouver_trees, "date_planted", "day"), count_by_day)
+  expect_error(count_by_time(vancouver_trees, date_planted, "year"), 'The selected column must be a string.')
+  expect_error(count_by_time(vancouver_trees, "planted_date", "year"), 'The selected column does not exist in the given dataset.')
+  expect_error(count_by_time(vancouver_trees, "curb", "year"), 'The selected column must be a Date.')
+  expect_error(count_by_time(vancouver_trees, "date_planted", "hour"), 'floor_unit must be one of the value in (\"year\", \"month\", \"day\").')
+})
+```
