@@ -1,0 +1,44 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# count.by.time
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of count.by.time is to provide a function to count the occurrence of data observations by multiple time frames
+
+## Installation
+
+You can install the development version of count.by.time from [GitHub](https://github.com/) with:
+
+```{r}
+# install.packages("devtools")
+# devtools::install_github("stat545ubc-2022/assignment-b1-and-b2-runzw", ref = "0.1.0")
+```
+
+## Example
+
+This is a basic example that shows you how to count the number of tree planted in different years/months/days based on vancouver_trees dataset.
+```{r, message = FALSE}
+library(datateachr)
+library(dplyr)
+library(tidyr)
+library(lubridate)
+library(count.by.time)
+(count_by_time(datateachr::vancouver_trees, "date_planted", "year"))
+(count_by_time(datateachr::vancouver_trees, "date_planted", "month"))
+(count_by_time(datateachr::vancouver_trees, "date_planted", "day"))
+```

@@ -1,0 +1,17 @@
+Package: count.by.time
+Title: Count the occurrence of data by multiple time frames
+Version: 0.1.0
+Authors@R: 
+    person("Runze", "Wang", , "runzw0817@gmail.com", role = c("aut", "cre"))
+Description: This count.by.time package provides functions to count the occurrence of data observations by multiple time frames.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.1
+Imports: 
+    dplyr,
+    lubridate,
+    tidyr
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
