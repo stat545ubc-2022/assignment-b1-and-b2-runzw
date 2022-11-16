@@ -26,7 +26,7 @@ You can install the development version of count.by.time from [GitHub](https://g
 
 ```{r}
 # install.packages("devtools")
-# devtools::install_github("stat545ubc-2022/assignment-b1-and-b2-runzw", ref = "0.1.0")
+devtools::install_github("stat545ubc-2022/assignment-b1-and-b2-runzw")
 ```
 
 ## Example
