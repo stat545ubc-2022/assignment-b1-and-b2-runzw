@@ -25,10 +25,10 @@ Given a Date column, count the occurrence of a date unit specified by floor_unit
 \examples{
 library(lubridate)
 library(dplyr)
-library(datateachr)
 library(tidyr)
-count_by_time(datateachr::vancouver_trees, "date_planted", "year")
-count_by_time(datateachr::vancouver_trees, "date_planted", "month")
-count_by_time(datateachr::vancouver_trees, "date_planted", "day")
+library(datateachr)
+count_by_time(vancouver_trees, "date_planted", "year")
+count_by_time(vancouver_trees, "date_planted", "month")
+count_by_time(vancouver_trees, "date_planted", "day")
 
 }
