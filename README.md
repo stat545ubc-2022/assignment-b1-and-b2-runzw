@@ -17,20 +17,23 @@ You can install the development version of count.by.time from
 ``` r
 # install.packages("devtools")
 devtools::install_github("stat545ubc-2022/assignment-b1-and-b2-runzw")
-#> Using github PAT from envvar GITHUB_PAT
 #> Downloading GitHub repo stat545ubc-2022/assignment-b1-and-b2-runzw@HEAD
 #> cli        (3.3.0 -> 3.4.1) [CRAN]
-#> vctrs      (0.4.1 -> 0.5.0) [CRAN]
+#> vctrs      (0.4.1 -> 0.5.1) [CRAN]
 #> tidyselect (1.1.2 -> 1.2.0) [CRAN]
 #> lifecycle  (1.0.2 -> 1.0.3) [CRAN]
 #> cpp11      (0.4.2 -> 0.4.3) [CRAN]
 #> purrr      (0.3.4 -> 0.3.5) [CRAN]
 #> lubridate  (1.8.0 -> 1.9.0) [CRAN]
 #> Installing 7 packages: cli, vctrs, tidyselect, lifecycle, cpp11, purrr, lubridate
-#> Installing packages into 'C:/Users/wrZZZZZ/AppData/Local/Temp/RtmpGywdD1/temp_libpath5a205fda3714'
+#> Installing packages into 'C:/Users/wrZZZZZ/AppData/Local/Temp/RtmpAnkyr8/temp_libpath4e7832531aad'
 #> (as 'lib' is unspecified)
+#> 
+#>   There is a binary version available but the source version is later:
+#>       binary source needs_compilation
+#> vctrs  0.5.0  0.5.1              TRUE
+#> 
 #> package 'cli' successfully unpacked and MD5 sums checked
-#> package 'vctrs' successfully unpacked and MD5 sums checked
 #> package 'tidyselect' successfully unpacked and MD5 sums checked
 #> package 'lifecycle' successfully unpacked and MD5 sums checked
 #> package 'cpp11' successfully unpacked and MD5 sums checked
@@ -38,16 +41,17 @@ devtools::install_github("stat545ubc-2022/assignment-b1-and-b2-runzw")
 #> package 'lubridate' successfully unpacked and MD5 sums checked
 #> 
 #> The downloaded binary packages are in
-#>  C:\Users\wrZZZZZ\AppData\Local\Temp\Rtmp6faa01\downloaded_packages
-#>          checking for file 'C:\Users\wrZZZZZ\AppData\Local\Temp\Rtmp6faa01\remotes5b1042513105\stat545ubc-2022-assignment-b1-and-b2-runzw-58c4109/DESCRIPTION' ...  ✔  checking for file 'C:\Users\wrZZZZZ\AppData\Local\Temp\Rtmp6faa01\remotes5b1042513105\stat545ubc-2022-assignment-b1-and-b2-runzw-58c4109/DESCRIPTION'
+#>  C:\Users\wrZZZZZ\AppData\Local\Temp\RtmpmAW0X6\downloaded_packages
+#> installing the source package 'vctrs'
+#>          checking for file 'C:\Users\wrZZZZZ\AppData\Local\Temp\RtmpmAW0X6\remotes56483bf16131\stat545ubc-2022-assignment-b1-and-b2-runzw-3ddc5a4/DESCRIPTION' ...  ✔  checking for file 'C:\Users\wrZZZZZ\AppData\Local\Temp\RtmpmAW0X6\remotes56483bf16131\stat545ubc-2022-assignment-b1-and-b2-runzw-3ddc5a4/DESCRIPTION'
 #>       ─  preparing 'count.by.time':
 #>    checking DESCRIPTION meta-information ...     checking DESCRIPTION meta-information ...   ✔  checking DESCRIPTION meta-information
 #>       ─  checking for LF line-endings in source and make files and shell scripts
 #>   ─  checking for empty or unneeded directories
-#> ─  building 'count.by.time_0.1.0.tar.gz'
+#>       ─  building 'count.by.time_0.1.0.tar.gz'
 #>      
 #> 
-#> Installing package into 'C:/Users/wrZZZZZ/AppData/Local/Temp/RtmpGywdD1/temp_libpath5a205fda3714'
+#> Installing package into 'C:/Users/wrZZZZZ/AppData/Local/Temp/RtmpAnkyr8/temp_libpath4e7832531aad'
 #> (as 'lib' is unspecified)
 ```
 
