@@ -22,8 +22,8 @@
 #' @export
 #'
 count_by_time <- function(dataset, date_column, floor_unit) {
-  if (!is.character(date_column)) {
-    stop("The selected column must be a string.")
+  if (!is.character(date_column) | (length(date_column) != 1)) {
+    stop("The selected column must be a single string.")
   }
 
   if(!(date_column %in% names(dataset))){
@@ -40,9 +40,9 @@ count_by_time <- function(dataset, date_column, floor_unit) {
 
   format_unit <- if(floor_unit == "year") "%Y" else (if(floor_unit == "month") "%b" else "%d")
   return (dataset %>%
-            tidyr::drop_na(.data[[date_column]]) %>%
-            dplyr::mutate(date_floored = lubridate::floor_date(.data[[date_column]], unit=floor_unit)) %>%
-            dplyr::mutate(time = format(date_floored, format_unit)) %>%
-            dplyr::group_by(time) %>%
-            dplyr::count(time, name = "count"))
+    tidyr::drop_na(.data[[date_column]]) %>%
+    dplyr::mutate(date_floored = lubridate::floor_date(.data[[date_column]], unit=floor_unit)) %>%
+    dplyr::mutate(time = format(date_floored, format_unit)) %>%
+    dplyr::group_by(time) %>%
+    dplyr::count(time, name = "count"))
 }

@@ -23,7 +23,7 @@ count_by_day <- vancouver_trees %>%
   group_by(time) %>%
   count(time, name = "count")
 
-date_planted <- c("a", "random", "object")
+date_planted <- c("date_planted", "curb")
 
 test_that("Test count_by_time function", {
   # Test if it handles "year" correctly
@@ -33,7 +33,7 @@ test_that("Test count_by_time function", {
   # Test if it handles "day" correctly
   expect_equal(count_by_time(vancouver_trees, "date_planted", "day"), count_by_day)
   # Test if it throws an error when the input column is an object
-  expect_error(count_by_time(vancouver_trees, date_planted, "year"), 'The selected column must be a string.')
+  expect_error(count_by_time(vancouver_trees, date_planted, "year"), 'The selected column must be a single string.')
   # Test if it throws an error when the input column does not exist
   expect_error(count_by_time(vancouver_trees, "planted_date", "year"), 'The selected column does not exist in the given dataset.')
   # Test if it throws an error when the input column is not a Date column
