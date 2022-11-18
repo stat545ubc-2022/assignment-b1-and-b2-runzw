@@ -1,3 +1,7 @@
+library(tidyr)
+library(dplyr)
+library(lubridate)
+library(datateachr)
 count_by_year <- vancouver_trees %>%
   drop_na(date_planted) %>%
   mutate(date_floored = floor_date(date_planted, unit="year")) %>%
@@ -18,6 +22,8 @@ count_by_day <- vancouver_trees %>%
   mutate(time = format(date_floored, "%d")) %>%
   group_by(time) %>%
   count(time, name = "count")
+
+date_planted <- c("a", "random", "object")
 
 test_that("Test count_by_time function", {
   # Test if it handles "year" correctly
